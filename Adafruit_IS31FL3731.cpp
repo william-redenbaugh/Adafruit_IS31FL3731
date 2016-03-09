@@ -3,6 +3,10 @@
 #include <Wire.h>
 #include <Adafruit_IS31FL3731.h>
 
+#ifndef _swap_int16_t
+#define _swap_int16_t(a, b) { int16_t t = a; a = b; b = t; }
+#endif
+
 
 /* Constructor */
 Adafruit_IS31FL3731::Adafruit_IS31FL3731(void) : Adafruit_GFX(16, 9) {
@@ -29,13 +33,11 @@ boolean Adafruit_IS31FL3731::begin(uint8_t addr) {
   displayFrame(_frame);
 
   // all LEDs on & 0 PWM
-  for (uint8_t f=0; f<8; f++) {
-    for (uint8_t i=0; i<144; i++)
-      setLEDPWM(i, 0x0, f);           // set each led to 0 PWM
+  clear(); // set each led to 0 PWM
 
+  for (uint8_t f=0; f<8; f++) {  
     for (uint8_t i=0; i<=0x11; i++)
       writeRegister8(f, i, 0xff);     // each 8 LEDs on
-
   }
 
   audioSync(false);
@@ -43,6 +45,21 @@ boolean Adafruit_IS31FL3731::begin(uint8_t addr) {
   return true;
 }
 
+void Adafruit_IS31FL3731::clear(void) {
+  // all LEDs on & 0 PWM
+
+  selectBank(_frame);
+
+  for (uint8_t i=0; i<6; i++) {
+    Wire.beginTransmission(_i2caddr);
+    Wire.write((byte) 0x24+i*24);
+    // write 24 bytes at once
+    for (uint8_t j=0; j<24; j++) {
+      Wire.write((byte) 0);
+    }
+    Wire.endTransmission();
+  }
+}
 
 void Adafruit_IS31FL3731::setLEDPWM(uint8_t lednum, uint8_t pwm, uint8_t bank) {
   if (lednum >= 144) return;
@@ -51,6 +68,22 @@ void Adafruit_IS31FL3731::setLEDPWM(uint8_t lednum, uint8_t pwm, uint8_t bank) {
 
 
 void Adafruit_IS31FL3731::drawPixel(int16_t x, int16_t y, uint16_t color) {
+ // check rotation, move pixel around if necessary
+  switch (getRotation()) {
+  case 1:
+    _swap_int16_t(x, y);
+    x = 16 - x - 1;
+    break;
+  case 2:
+    x = 16 - x - 1;
+    y = 9 - y - 1;
+    break;
+  case 3:
+    _swap_int16_t(x, y);
+    y = 9 - y - 1;
+    break;
+  }
+
   if ((x < 0) || (x >= 16)) return;
   if ((y < 0) || (y >= 9)) return;
   if (color > 255) color = 255; // PWM 8bit max
