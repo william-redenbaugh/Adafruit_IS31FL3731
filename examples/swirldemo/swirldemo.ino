@@ -18,14 +18,11 @@ void setup() {
   Serial.println("IS31 found!");
 }
 
-uint8_t incr =0;
 void loop() {
-   // animate over all the pixels, and set the brightness from the sweep table
-   for (uint8_t x=0; x<16; x++) {
-    for (uint8_t y=0; y<9; y++) {
-      ledmatrix.drawPixel(x, y, sweep[(x+y+incr)%24]);
-    }
-  }
-  incr++;
+  // animate over all the pixels, and set the brightness from the sweep table
+  for (uint8_t incr = 0; incr < 24; incr++)
+    for (uint8_t x = 0; x < 16; x++)
+      for (uint8_t y = 0; y < 9; y++)
+        ledmatrix.drawPixel(x, y, sweep[(x+y+incr)%24]);
   delay(20);
 }
