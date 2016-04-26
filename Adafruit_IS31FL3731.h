@@ -26,7 +26,6 @@
 
 
 class Adafruit_IS31FL3731 : public Adafruit_GFX {
-
  public:
   Adafruit_IS31FL3731(void);
   boolean begin(uint8_t addr = ISSI_ADDR_DEFAULT);
@@ -38,11 +37,16 @@ class Adafruit_IS31FL3731 : public Adafruit_GFX {
   void setFrame(uint8_t b);
   void displayFrame(uint8_t frame);
 
- private:
+ protected:
   void selectBank(uint8_t bank);
   void writeRegister8(uint8_t bank, uint8_t reg, uint8_t data);
   uint8_t readRegister8(uint8_t bank, uint8_t reg);
   uint8_t _i2caddr, _frame;
+};
+
+class Adafruit_IS31FL3731_Wing : public Adafruit_IS31FL3731 {
+ public:
+   void drawPixel(int16_t x, int16_t y, uint16_t color);
 };
 
 
