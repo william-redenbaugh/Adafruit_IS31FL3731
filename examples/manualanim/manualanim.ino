@@ -2,8 +2,11 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_IS31FL3731.h>
 
+// If you're using the full breakout...
 Adafruit_IS31FL3731 ledmatrix = Adafruit_IS31FL3731();
-  
+// If you're using the FeatherWing version
+//Adafruit_IS31FL3731_Wing ledmatrix = Adafruit_IS31FL3731_Wing();
+
 void setup() {
 
   Serial.begin(9600);
@@ -20,6 +23,7 @@ void setup() {
 
   // fill all 8 frames with some text
   for (uint8_t frame = 0; frame < 8; frame++) {
+    ledmatrix.clear();
     ledmatrix.setFrame(frame);
     ledmatrix.setCursor(0,0);
     ledmatrix.write('a'+frame*3);

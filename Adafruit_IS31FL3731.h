@@ -27,7 +27,7 @@
 
 class Adafruit_IS31FL3731 : public Adafruit_GFX {
  public:
-  Adafruit_IS31FL3731(void);
+  Adafruit_IS31FL3731(uint8_t x=16, uint8_t y=9); 
   boolean begin(uint8_t addr = ISSI_ADDR_DEFAULT);
   void drawPixel(int16_t x, int16_t y, uint16_t color);
   void clear(void);
@@ -46,7 +46,8 @@ class Adafruit_IS31FL3731 : public Adafruit_GFX {
 
 class Adafruit_IS31FL3731_Wing : public Adafruit_IS31FL3731 {
  public:
-   void drawPixel(int16_t x, int16_t y, uint16_t color);
+  Adafruit_IS31FL3731_Wing(void);
+  void drawPixel(int16_t x, int16_t y, uint16_t color);
 };
 
 

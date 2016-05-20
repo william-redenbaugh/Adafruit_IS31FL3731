@@ -2,7 +2,10 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_IS31FL3731.h>
 
+// If you're using the full breakout...
 Adafruit_IS31FL3731 matrix = Adafruit_IS31FL3731();
+// If you're using the FeatherWing version
+//Adafruit_IS31FL3731_Wing matrix = Adafruit_IS31FL3731_Wing();
 
 static const uint8_t PROGMEM
   smile_bmp[] =
@@ -67,12 +70,12 @@ void loop() {
   delay(500);
 
   matrix.clear();
-  matrix.drawLine(0,0, 15,8, 127);
+  matrix.drawLine(0,0, matrix.width()-1, matrix.height()-1, 127);
   delay(500);
 
   matrix.clear();
-  matrix.drawRect(0,0, 16,9, 255);
-  matrix.fillRect(2,2, 12,5, 20);
+  matrix.drawRect(0,0, matrix.width(), matrix.height(), 255);
+  matrix.fillRect(2,2, matrix.width()-4, matrix.height()-4, 20);
   delay(500);
 
   matrix.clear();
@@ -86,7 +89,7 @@ void loop() {
   matrix.setTextColor(100);
   for (int8_t x=0; x>=-32; x--) {
     matrix.clear();
-    matrix.setCursor(x,1);
+    matrix.setCursor(x,0);
     matrix.print("Hello");
     delay(100);
   }
