@@ -1,5 +1,5 @@
 #ifndef _ADAFRUIT_IS31FL3731_H_
-#define _ADAFRUIT_IS31Fl3731_H_
+#define _ADAFRUIT_IS31FL3731_H_
 
 #include <Wire.h>
 #include <Arduino.h>
