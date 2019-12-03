@@ -17,7 +17,8 @@ Adafruit_IS31FL3731_Wing::Adafruit_IS31FL3731_Wing(void) : Adafruit_IS31FL3731(1
 
 boolean Adafruit_IS31FL3731::begin(uint8_t addr) {
   Wire.begin();
-
+  Wire.setClock(400000);
+  
   _i2caddr = addr;
   _frame = 0;
 
@@ -86,9 +87,8 @@ void Adafruit_IS31FL3731_Wing::drawPixel(int16_t x, int16_t y, uint16_t color) {
     break;
   }
 
-  // charlie wing is smaller
-  //if (x > 15) return;
-  //if (y > 7) return;
+  // charlie wing is smaller:
+  if ((x < 0) || (x >= 16) || (y < 0) || (y >= 7)) return;
 
   if (x > 7) {
     x=15-x;
@@ -98,10 +98,7 @@ void Adafruit_IS31FL3731_Wing::drawPixel(int16_t x, int16_t y, uint16_t color) {
   }
 
   _swap_int16_t(x, y);
-
  
-  if ((x < 0) || (x >= 16)) return;
-  if ((y < 0) || (y >= 9)) return;
   if (color > 255) color = 255; // PWM 8bit max
 
   setLEDPWM(x + y*16, color, _frame);
