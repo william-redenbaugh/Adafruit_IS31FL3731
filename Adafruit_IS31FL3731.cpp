@@ -8,19 +8,44 @@
 #endif
 
 
-/* Constructor */
-Adafruit_IS31FL3731::Adafruit_IS31FL3731(uint8_t x, uint8_t y) : Adafruit_GFX(x, y) {
+/**************************************************************************/
+/*!
+    @brief Constructor for breakout version
+    @param width Desired width of led display
+    @param height Desired height of led display
+*/
+/**************************************************************************/
+
+Adafruit_IS31FL3731::Adafruit_IS31FL3731(uint8_t width, uint8_t height) : Adafruit_GFX(width, height) {
 }
 
+/**************************************************************************/
+/*!
+    @brief Constructor for FeatherWing version (15x7 LEDs)
+*/
+/**************************************************************************/
 Adafruit_IS31FL3731_Wing::Adafruit_IS31FL3731_Wing(void) : Adafruit_IS31FL3731(15, 7) {
 }
 
-boolean Adafruit_IS31FL3731::begin(uint8_t addr) {
+/**************************************************************************/
+/*!
+    @brief Initialize hardware and clear display
+    @param addr The I2C address we expect to find the chip at
+    @returns True on success, false if chip isnt found
+*/
+/**************************************************************************/
+bool Adafruit_IS31FL3731::begin(uint8_t addr) {
   Wire.begin();
   Wire.setClock(400000);
   
   _i2caddr = addr;
   _frame = 0;
+
+  // A basic scanner, see if it ACK's
+  Wire.beginTransmission(i2c_addr);
+  if (Wire.endTransmission () != 0) {
+    return false;
+  }
 
   // shutdown
   writeRegister8(ISSI_BANK_FUNCTIONREG, ISSI_REG_SHUTDOWN, 0x00);
@@ -81,7 +106,15 @@ void Adafruit_IS31FL3731::setLEDPWM(uint8_t lednum, uint8_t pwm, uint8_t bank) {
   writeRegister8(bank, 0x24+lednum, pwm);
 }
 
-
+/**************************************************************************/
+/*!
+    @brief Adafruit GFX low level accesssor - sets a 8-bit PWM pixel value
+    handles rotation and pixel arrangement, unlike setLEDPWM
+    @param x The x position, starting with 0 for left-most side
+    @param y The y position, starting with 0 for top-most side
+    @param color Despite being a 16-bit value, takes 0 (off) to 255 (max on)
+*/
+/**************************************************************************/
 void Adafruit_IS31FL3731_Wing::drawPixel(int16_t x, int16_t y, uint16_t color) {
  // check rotation, move pixel around if necessary
   switch (getRotation()) {
@@ -181,7 +214,7 @@ void Adafruit_IS31FL3731::displayFrame(uint8_t frame) {
     @param bank The IS31 bank to switch to
 */
 /**************************************************************************/
-void Adafruit_IS31FL3731::selectBank(uint8_t b) {
+void Adafruit_IS31FL3731::selectBank(uint8_t bank) {
  Wire.beginTransmission(_i2caddr);
  Wire.write((byte)ISSI_COMMANDREGISTER);
  Wire.write(b);
@@ -239,13 +272,11 @@ uint8_t  Adafruit_IS31FL3731::readRegister8(uint8_t bank, uint8_t reg) {
  Wire.write((byte)reg);
  Wire.endTransmission();
 
- Wire.beginTransmission(_i2caddr);
  Wire.requestFrom(_i2caddr, (byte)1);
  x = Wire.read();
- Wire.endTransmission();
 
 // Serial.print("$"); Serial.print(reg, HEX);
-//  Serial.print(": 0x"); Serial.println(x, HEX);
+// Serial.print(": 0x"); Serial.println(x, HEX);
 
   return x;
 }

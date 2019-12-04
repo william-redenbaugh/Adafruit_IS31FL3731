@@ -25,6 +25,11 @@
 #define ISSI_BANK_FUNCTIONREG 0x0B    // helpfully called 'page nine'
 
 
+/**************************************************************************/
+/*!
+    @brief Constructor for generic IS31FL3731 breakout version
+*/
+/**************************************************************************/
 class Adafruit_IS31FL3731 : public Adafruit_GFX {
  public:
   Adafruit_IS31FL3731(uint8_t x=16, uint8_t y=9); 
@@ -45,6 +50,11 @@ class Adafruit_IS31FL3731 : public Adafruit_GFX {
     _frame; ///< The frame (of 8) we are currently addressing
 };
 
+/**************************************************************************/
+/*!
+    @brief Constructor for FeatherWing IS31FL3731 version
+*/
+/**************************************************************************/
 class Adafruit_IS31FL3731_Wing : public Adafruit_IS31FL3731 {
  public:
   Adafruit_IS31FL3731_Wing(void);
