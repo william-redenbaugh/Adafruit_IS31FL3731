@@ -48,9 +48,12 @@ boolean Adafruit_IS31FL3731::begin(uint8_t addr) {
   return true;
 }
 
+/**************************************************************************/
+/*!
+    @brief Sets all LEDs on & 0 PWM for current frame.
+*/
+/**************************************************************************/
 void Adafruit_IS31FL3731::clear(void) {
-  // all LEDs on & 0 PWM
-
   selectBank(_frame);
 
   for (uint8_t i=0; i<6; i++) {
@@ -64,6 +67,15 @@ void Adafruit_IS31FL3731::clear(void) {
   }
 }
 
+/**************************************************************************/
+/*!
+    @brief Low level accesssor - sets a 8-bit PWM pixel value to a bank location
+    does not handle rotation, x/y or any rearrangements!
+    @param lednum The offset into the bank that corresponds to the LED
+    @param bank The bank/frame we will set the data in
+    @param pwm brightnes, from 0 (off) to 255 (max on)
+*/
+/**************************************************************************/
 void Adafruit_IS31FL3731::setLEDPWM(uint8_t lednum, uint8_t pwm, uint8_t bank) {
   if (lednum >= 144) return;
   writeRegister8(bank, 0x24+lednum, pwm);
@@ -107,6 +119,15 @@ void Adafruit_IS31FL3731_Wing::drawPixel(int16_t x, int16_t y, uint16_t color) {
 
 
 
+/**************************************************************************/
+/*!
+    @brief Adafruit GFX low level accesssor - sets a 8-bit PWM pixel value
+    handles rotation and pixel arrangement, unlike setLEDPWM
+    @param x The x position, starting with 0 for left-most side
+    @param y The y position, starting with 0 for top-most side
+    @param color Despite being a 16-bit value, takes 0 (off) to 255 (max on)
+*/
+/**************************************************************************/
 void Adafruit_IS31FL3731::drawPixel(int16_t x, int16_t y, uint16_t color) {
  // check rotation, move pixel around if necessary
   switch (getRotation()) {
@@ -167,6 +188,12 @@ void Adafruit_IS31FL3731::selectBank(uint8_t b) {
  Wire.endTransmission();
 }
 
+/**************************************************************************/
+/*!
+    @brief Enable the audio 'sync' for brightness pulsing (not really tested)
+    @param sync True to enable, False to disable
+*/
+/**************************************************************************/
 void Adafruit_IS31FL3731::audioSync(boolean sync) {
   if (sync) {
     writeRegister8(ISSI_BANK_FUNCTIONREG, ISSI_REG_AUDIOSYNC, 0x1);
