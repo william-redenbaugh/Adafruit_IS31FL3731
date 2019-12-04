@@ -41,7 +41,8 @@ class Adafruit_IS31FL3731 : public Adafruit_GFX {
   void selectBank(uint8_t bank);
   void writeRegister8(uint8_t bank, uint8_t reg, uint8_t data);
   uint8_t readRegister8(uint8_t bank, uint8_t reg);
-  uint8_t _i2caddr, _frame;
+  uint8_t _i2caddr,  ///< The I2C address we expect to find the chip
+    _frame; ///< The frame (of 8) we are currently addressing
 };
 
 class Adafruit_IS31FL3731_Wing : public Adafruit_IS31FL3731 {

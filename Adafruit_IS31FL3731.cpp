@@ -132,16 +132,34 @@ void Adafruit_IS31FL3731::drawPixel(int16_t x, int16_t y, uint16_t color) {
   return;
 }
 
-void Adafruit_IS31FL3731::setFrame(uint8_t f) {
+/**************************************************************************/
+/*!
+    @brief Set's this object's frame tracker (does not talk to the chip)
+    @param frame Ranges from 0 - 7 for the 8 frames
+*/
+/**************************************************************************/
+void Adafruit_IS31FL3731::setFrame(uint8_t frame) {
   _frame = f;
 }
 
-void Adafruit_IS31FL3731::displayFrame(uint8_t f) {
+/**************************************************************************/
+/*!
+    @brief Have the chip set the display to the contents of a frame
+    @param frame Ranges from 0 - 7 for the 8 frames
+*/
+/**************************************************************************/
+void Adafruit_IS31FL3731::displayFrame(uint8_t frame) {
   if (f > 7) f = 0;
   writeRegister8(ISSI_BANK_FUNCTIONREG, ISSI_REG_PICTUREFRAME, f);
 }
 
 
+/**************************************************************************/
+/*!
+    @brief Switch to a given bank in the chip memory for future reads
+    @param bank The IS31 bank to switch to
+*/
+/**************************************************************************/
 void Adafruit_IS31FL3731::selectBank(uint8_t b) {
  Wire.beginTransmission(_i2caddr);
  Wire.write((byte)ISSI_COMMANDREGISTER);
@@ -157,8 +175,15 @@ void Adafruit_IS31FL3731::audioSync(boolean sync) {
   }
 }
 
-/*************/
-void Adafruit_IS31FL3731::writeRegister8(uint8_t b, uint8_t reg, uint8_t data) {
+/**************************************************************************/
+/*!
+    @brief Write one byte to a register located in a given bank
+    @param bank The IS31 bank to write the register location
+    @param reg the offset into the bank to write
+    @param data The byte value
+*/
+/**************************************************************************/
+void Adafruit_IS31FL3731::writeRegister8(uint8_t bank, uint8_t reg, uint8_t data) {
   selectBank(b);
 
   Wire.beginTransmission(_i2caddr);
@@ -169,6 +194,15 @@ void Adafruit_IS31FL3731::writeRegister8(uint8_t b, uint8_t reg, uint8_t data) {
   //Serial.print(" = 0x"); Serial.println(data, HEX);
 }
 
+
+/**************************************************************************/
+/*!
+    @brief  Read one byte from a register located in a given bank
+    @param   bank The IS31 bank to read the register location
+    @param   reg the offset into the bank to read
+    @return 1 byte value
+*/
+/**************************************************************************/
 uint8_t  Adafruit_IS31FL3731::readRegister8(uint8_t bank, uint8_t reg) {
  uint8_t x;
 
