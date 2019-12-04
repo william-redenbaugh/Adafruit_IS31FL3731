@@ -1,1 +1,1 @@
-# Adafruit_IS31FL3731 [![Build Status](https://travis-ci.com/adafruit/Adafruit_IS31FL373.svg?branch=master)](https://travis-ci.com/adafruit/Adafruit_IS31FL373)
+# Adafruit_IS31FL3731 [![Build Status](https://travis-ci.com/adafruit/Adafruit_IS31FL3731.svg?branch=master)](https://travis-ci.com/adafruit/Adafruit_IS31FL3731)
