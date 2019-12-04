@@ -42,7 +42,7 @@ bool Adafruit_IS31FL3731::begin(uint8_t addr) {
   _frame = 0;
 
   // A basic scanner, see if it ACK's
-  Wire.beginTransmission(i2c_addr);
+  Wire.beginTransmission(_i2caddr);
   if (Wire.endTransmission () != 0) {
     return false;
   }
@@ -193,7 +193,7 @@ void Adafruit_IS31FL3731::drawPixel(int16_t x, int16_t y, uint16_t color) {
 */
 /**************************************************************************/
 void Adafruit_IS31FL3731::setFrame(uint8_t frame) {
-  _frame = f;
+  _frame = frame;
 }
 
 /**************************************************************************/
@@ -203,8 +203,8 @@ void Adafruit_IS31FL3731::setFrame(uint8_t frame) {
 */
 /**************************************************************************/
 void Adafruit_IS31FL3731::displayFrame(uint8_t frame) {
-  if (f > 7) f = 0;
-  writeRegister8(ISSI_BANK_FUNCTIONREG, ISSI_REG_PICTUREFRAME, f);
+  if (frame > 7) frame = 0;
+  writeRegister8(ISSI_BANK_FUNCTIONREG, ISSI_REG_PICTUREFRAME, frame);
 }
 
 
@@ -217,7 +217,7 @@ void Adafruit_IS31FL3731::displayFrame(uint8_t frame) {
 void Adafruit_IS31FL3731::selectBank(uint8_t bank) {
  Wire.beginTransmission(_i2caddr);
  Wire.write((byte)ISSI_COMMANDREGISTER);
- Wire.write(b);
+ Wire.write(bank);
  Wire.endTransmission();
 }
 
@@ -244,7 +244,7 @@ void Adafruit_IS31FL3731::audioSync(boolean sync) {
 */
 /**************************************************************************/
 void Adafruit_IS31FL3731::writeRegister8(uint8_t bank, uint8_t reg, uint8_t data) {
-  selectBank(b);
+  selectBank(bank);
 
   Wire.beginTransmission(_i2caddr);
   Wire.write((byte)reg);
