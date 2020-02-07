@@ -33,12 +33,12 @@
 class Adafruit_IS31FL3731 : public Adafruit_GFX {
  public:
   Adafruit_IS31FL3731(uint8_t x=16, uint8_t y=9); 
-  boolean begin(uint8_t addr = ISSI_ADDR_DEFAULT);
+  bool begin(uint8_t addr = ISSI_ADDR_DEFAULT);
   void drawPixel(int16_t x, int16_t y, uint16_t color);
   void clear(void);
 
   void setLEDPWM(uint8_t lednum, uint8_t pwm, uint8_t bank = 0);
-  void audioSync(boolean sync);
+  void audioSync(bool sync);
   void setFrame(uint8_t b);
   void displayFrame(uint8_t frame);
 

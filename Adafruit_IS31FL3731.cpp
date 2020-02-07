@@ -227,7 +227,7 @@ void Adafruit_IS31FL3731::selectBank(uint8_t bank) {
     @param sync True to enable, False to disable
 */
 /**************************************************************************/
-void Adafruit_IS31FL3731::audioSync(boolean sync) {
+void Adafruit_IS31FL3731::audioSync(bool sync) {
   if (sync) {
     writeRegister8(ISSI_BANK_FUNCTIONREG, ISSI_REG_AUDIOSYNC, 0x1);
   } else {
