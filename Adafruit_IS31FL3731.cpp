@@ -36,7 +36,7 @@ Adafruit_IS31FL3731_Wing::Adafruit_IS31FL3731_Wing(void) : Adafruit_IS31FL3731(1
 /**************************************************************************/
 bool Adafruit_IS31FL3731::begin(uint8_t addr) {
   Wire.begin();
-  Wire.setClock(400000);
+  Wire.setClock(1000000);
   
   _i2caddr = addr;
   _frame = 0;
@@ -162,15 +162,15 @@ void Adafruit_IS31FL3731_Wing::drawPixel(int16_t x, int16_t y, uint16_t color) {
 */
 /**************************************************************************/
 void Adafruit_IS31FL3731::drawPixel(int16_t x, int16_t y, uint16_t color) {
- // check rotation, move pixel around if necessary
+  // check rotation, move pixel around if necessary
   switch (getRotation()) {
   case 1:
     _swap_int16_t(x, y);
-    x = 16 - x - 1;
+    x = 15 - x - 1;
     break;
   case 2:
-    x = 16 - x - 1;
-    y = 9 - y - 1;
+    x = 15 - x - 1;
+    y = 7 - y - 1;
     break;
   case 3:
     _swap_int16_t(x, y);
@@ -178,8 +178,18 @@ void Adafruit_IS31FL3731::drawPixel(int16_t x, int16_t y, uint16_t color) {
     break;
   }
 
-  if ((x < 0) || (x >= 16)) return;
-  if ((y < 0) || (y >= 9)) return;
+  // charlie wing is smaller:
+  if ((x < 0) || (x >= 16) || (y < 0) || (y >= 7)) return;
+
+  if (x > 7) {
+    x=15-x;
+    y += 8;
+  } else {
+    y = 7-y;
+  }
+
+  _swap_int16_t(x, y);
+ 
   if (color > 255) color = 255; // PWM 8bit max
 
   setLEDPWM(x + y*16, color, _frame);
